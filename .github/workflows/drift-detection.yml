@@ -1,0 +1,35 @@
+name: Terraform Drift Detection
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  pull_request:
+
+jobs:
+  drift-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform Plan
+        run: terraform -chdir=terraform plan -out=tfplan
+
+      - name: Convert Plan to JSON
+        run: terraform -chdir=terraform show -json tfplan > plan.json
+
+      - name: Detect Drift
+        run: python scripts/parse_plan.py
+
+      - name: Send Alert
+        if: failure()
+        run: python scripts/send_alert.py
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
