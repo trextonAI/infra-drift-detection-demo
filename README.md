@@ -15,6 +15,7 @@ This repository implements an automated **Governance Framework** for Azure using
 - **Integrations:** Jira REST API, MS Teams Webhooks
 
 
+
 **HLD:The Workflow:**
 - Trigger: A Scheduled Azure DevOps Pipeline (Cron Job) runs daily/weekly.
 - Execution: The Pipeline runs terraform plan against the Azure Subscription.
@@ -22,6 +23,7 @@ This repository implements an automated **Governance Framework** for Azure using
 **Integration:**
 - Jira API: Creates a "Task" for the DevOps team to review.
 - MS Teams Webhook: Sends a "Critical Alert" card to the team channel.
+
 
 
 **"How exactly does the code do this?"**
