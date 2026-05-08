@@ -27,7 +27,7 @@ This repository implements an automated **Governance Framework** for Azure using
 
 
 ###  **"How exactly does the code do this?"**
-- A. The Terraform Exit Code Logic
+A. The Terraform Exit Code Logic
 - In a script, we use the -detailed-exitcode flag.
  -  0 = Succeeded with no changes.
  -  1 = Error.
@@ -43,6 +43,6 @@ This repository implements an automated **Governance Framework** for Azure using
 - The "Messenger" (The Pipeline):
    -Calls the Jira REST API to log the incident for tracking.
    -Calls the Teams Incoming Webhook to notify the on-call engineer immediately.
--Resolution: The engineer either:
+- Resolution: The engineer either:
    -Reverts the manual change (Runs terraform apply).
    -Updates the code to match reality.
