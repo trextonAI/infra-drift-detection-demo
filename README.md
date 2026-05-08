@@ -32,7 +32,7 @@ A. The Terraform Exit Code Logic
  -  0 = Succeeded with no changes.
  -  1 = Error.
  -  2 = Succeeded with changes (Drift detected).
-- B. The Integration Script (Bash/PowerShell)
+B. The Integration Script (Bash/PowerShell)
 -scripts/notify.sh
 
   
