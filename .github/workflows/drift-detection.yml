@@ -1,35 +1,44 @@
-name: Terraform Drift Detection
+name: 'Azure Drift Detection'
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
-  pull_request:
+    - cron: '0 0 * * *' # Every night at midnight
+  workflow_dispatch:      # Allows manual trigger for testing
 
 jobs:
-  drift-check:
+  drift-detection:
     runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+      JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+      JIRA_DOMAIN: ${{ secrets.JIRA_DOMAIN }}
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false # Important to get raw exit codes
 
-      - name: Terraform Init
-        run: terraform -chdir=terraform init
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform
 
-      - name: Terraform Plan
-        run: terraform -chdir=terraform plan -out=tfplan
+    - name: Terraform Plan (Drift Check)
+      id: plan
+      run: |
+        terraform plan -detailed-exitcode -out=drift.tfplan || echo "exit_code=$?" >> $GITHUB_OUTPUT
+      working-directory: ./terraform
+      continue-on-error: true # So the pipeline doesn't stop if exit code is 2
 
-      - name: Convert Plan to JSON
-        run: terraform -chdir=terraform show -json tfplan > plan.json
-
-      - name: Detect Drift
-        run: python scripts/parse_plan.py
-
-      - name: Send Alert
-        if: failure()
-        run: python scripts/send_alert.py
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Run Notification Script
+      run: |
+        chmod +x ./scripts/notify.sh
+        ./scripts/notify.sh ${{ steps.plan.outputs.exit_code }}
