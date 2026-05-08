@@ -16,7 +16,7 @@ This repository implements an automated **Governance Framework** for Azure using
 
 
 
-**HLD:The Workflow:**
+###  **HLD:The Workflow:**
 - Trigger: A Scheduled Azure DevOps Pipeline (Cron Job) runs daily/weekly.
 - Execution: The Pipeline runs terraform plan against the Azure Subscription.
 - Analysis: A script checks the Plan output. If changes are found (Exit Code 2), the "Alerting Logic" is triggered.
@@ -26,7 +26,7 @@ This repository implements an automated **Governance Framework** for Azure using
 
 
 
-**"How exactly does the code do this?"**
+###  **"How exactly does the code do this?"**
 A. The Terraform Exit Code Logic
  In a script, we use the -detailed-exitcode flag.
   0 = Succeeded with no changes.
@@ -36,7 +36,7 @@ B. The Integration Script (Bash/PowerShell)
 scripts/notify.sh
 
   
-**The "Process Flow" Summary**
+###  **The "Process Flow" Summary**
 - Scheduled Trigger: Every night at 12 AM, Azure DevOps wakes up.
 - State Comparison: Terraform compares the State File (Azure Blob) with the Live Azure Resources.
 - Drift Identification: Terraform finds a manual change (e.g., "Someone added a Public IP to a VM").
