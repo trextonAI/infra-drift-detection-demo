@@ -27,12 +27,12 @@ This repository implements an automated **Governance Framework** for Azure using
 
 
 ###  **"How exactly does the code do this?"**
-#A. The Terraform Exit Code Logic
+##A. The Terraform Exit Code Logic
 - In a script, we use the -detailed-exitcode flag.
  -  0 = Succeeded with no changes.
  -  1 = Error.
  -  2 = Succeeded with changes (Drift detected).
-#B. The Integration Script (Bash/PowerShell)
+##B. The Integration Script (Bash/PowerShell)
 -scripts/notify.sh
 
   
