@@ -1,24 +1,15 @@
-# 🚀 Terraform Drift Detection Demo
+# Azure Infrastructure Drift Detection System
 
-## 📌 Overview
-This project demonstrates an automated Infrastructure Drift Detection system using Terraform and GitHub Actions.
+This repository implements an automated **Governance Framework** for Azure using Terraform and GitHub Actions.
 
-## ⚙️ Features
-- Scheduled drift detection (every 6 hours)
-- CI/CD pipeline using GitHub Actions
-- Slack alerting on drift detection
-- Policy as Code (OPA)
+###  Features
+- **Scheduled Monitoring:** Daily drift checks via Cron jobs.
+- **Detailed Analysis:** Uses `terraform plan -detailed-exitcode` to find manual Portal changes.
+- **Automated Ticketing:** Creates a **Jira Ticket** automatically when drift is found.
+- **Instant Messaging:** Sends a **Microsoft Teams** adaptive card alert.
 
-
-## 🧱 Architecture
-1. Terraform manages infrastructure
-2. GitHub Actions runs `terraform plan`
-3. Plan output is analyzed for drift
-4. Alerts triggered on mismatch
-
-## 🚀 How to Run
-
-### 1. Clone Repo
-```bash
-git clone https://github.com/your-username/infra-drift-detection-demo.git
-cd infra-drift-detection-demo
+###  Tech Stack
+- **IaC:** Terraform (AzureRM Provider)
+- **CI/CD:** GitHub Actions
+- **Security:** Azure Service Principal (RBAC)
+- **Integrations:** Jira REST API, MS Teams Webhooks
